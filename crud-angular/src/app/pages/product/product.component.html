@@ -1,0 +1,131 @@
+<h1 class="mt-5">
+  Lista de Productos
+
+  <button class="btn btn-outline-primary btn-sm" (click)="openModal(template, null)">
+    <fa-icon [icon]="['fas', 'plus']"></fa-icon> Nuevo
+  </button>
+</h1>
+
+<table class="table table-bordered table-sm">
+  <thead class="table-secondary">
+  <tr>
+    <td>N° Orden</td>
+    <td>Valor Unitario</td>
+    <td>Unidad</td>
+    <td>Descripción</td>
+    <td>Cod Reg</td>
+    <td>Cant</td>
+    <td>Cant Caja</td>
+    <td>Peso</td>
+    <td>Volumen</td>
+    <td>Marca</td>
+    <td>Estado</td>
+    <td>Ops</td>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let product of products; let i = index">
+    <td>{{product.order_number}}</td>
+    <td>{{product.value_unit}}</td>
+    <td>{{product.unit}}</td>
+    <td>{{product.description}}</td>
+    <td>{{product.sku}}</td>
+    <td>{{product.quantity}}</td>
+    <td>{{product.qty_box}}</td>
+    <td>{{product.weight}}</td>
+    <td>{{product.volumen}}</td>
+    <td>{{product.mark}}</td>
+    <td>
+      <span class="badge" [ngClass]="{'bg-success': product.status, 'bg-danger': !product.status}">
+        {{product.status ? 'Activo' : 'Inactivo'}}
+      </span>
+    </td>
+    <td>
+      <button class="btn btn-outline-secondary btn-sm" (click)="openModal(template, product)">
+        <fa-icon [icon]="['far', 'edit']"></fa-icon>
+      </button>&nbsp;
+      <button class="btn btn-outline-danger btn-sm" (click)="delete(product)" *ngIf="product.status">
+        <fa-icon [icon]="['far', 'trash-alt']"></fa-icon>
+      </button>
+      <button class="btn btn-outline-success btn-sm" (click)="delete(product)" *ngIf="!product.status">
+        <fa-icon [icon]="['far', 'check-circle']"></fa-icon>
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">
+      {{!this.editingId ? 'Nuevo' : 'Editar'}} Producto
+    </h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modalRef.hide()"></button>
+  </div>
+  <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="mb-1 col-md-6">
+          <label for="order" class="col-form-label">Orden</label>
+          <select class="form-select" id="order" formControlName="id_order" [attr.disabled]="editingId">
+            <option value="null">** Seleccione **</option>
+            <option *ngFor="let order of orders" value="{{order.id}}">{{order.order_number}}</option>
+          </select>
+        </div>
+        <div class="mb-1 col-md-6">
+          <label for="unit" class="col-form-label">Orden</label>
+          <select class="form-select" id="unit" formControlName="unit">
+            <option value="null">** Seleccione **</option>
+            <option value="Cm">CM</option>
+            <option value="Kg">Kg</option>
+            <option value="Libras">Libras</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-1">
+        <label for="description" class="col-form-label">Descripción</label>
+        <textarea class="form-control" id="description" formControlName="description"></textarea>
+      </div>
+      <div class="row">
+        <div class="mb-1 col-md-6">
+          <label for="sku" class="col-form-label">Código Registro</label>
+          <input type="text" class="form-control" id="sku" formControlName="sku" [readOnly]="!!editingId">
+        </div>
+        <div class="mb-1 col-md-6">
+          <label for="value_unit" class="col-form-label">Valor Unitario</label>
+          <input type="number" class="form-control" id="value_unit" formControlName="value_unit">
+        </div>
+      </div>
+      <div class="row">
+        <div class="mb-1 col-md-6">
+          <label for="quantity" class="col-form-label">Cantidad</label>
+          <input type="text" class="form-control" id="quantity" formControlName="quantity">
+        </div>
+        <div class="mb-1 col-md-6">
+          <label for="qty_box" class="col-form-label">Cant Caja</label>
+          <input type="number" class="form-control" id="qty_box" formControlName="qty_box">
+        </div>
+      </div>
+      <div class="row">
+        <div class="mb-1 col-md-6">
+          <label for="weight" class="col-form-label">Peso</label>
+          <input type="text" class="form-control" id="weight" formControlName="weight">
+        </div>
+        <div class="mb-1 col-md-6">
+          <label for="volumen" class="col-form-label">Volumen</label>
+          <input type="number" class="form-control" id="volumen" formControlName="volumen">
+        </div>
+      </div>
+
+      <div class="mb-1">
+        <label for="mark" class="col-form-label">Marca</label>
+        <input type="text" class="form-control" id="mark" formControlName="mark">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Cancelar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!formData.valid">Guardar</button>
+    </div>
+  </form>
+</ng-template>
+

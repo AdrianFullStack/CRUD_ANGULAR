@@ -1,0 +1,97 @@
+<h1 class="mt-5">
+  Lista de Ordenes
+
+  <button class="btn btn-outline-primary btn-sm" (click)="openModal(template, null)">
+    <fa-icon [icon]="['fas', 'plus']"></fa-icon> Nuevo
+  </button>
+</h1>
+
+<table class="table table-bordered table-sm">
+  <thead class="table-secondary">
+    <tr>
+      <td>Usuario</td>
+      <td>N° Orden</td>
+      <td>Fecha Orden</td>
+      <td>Proveedor</td>
+      <td>Nota</td>
+      <td>Total</td>
+      <td>Estado</td>
+      <td>Ops</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of orders; let i = index">
+      <td>{{order.name}}</td>
+      <td>{{order.order_number}}</td>
+      <td>{{order.date_time}}</td>
+      <td>{{order.provider_name}}</td>
+      <td>{{order.observation}}</td>
+      <td>{{order.total_value}}</td>
+      <td>
+        <span class="badge" [ngClass]="{'bg-success': order.status, 'bg-danger': !order.status}">
+        {{order.status ? 'Activo' : 'Inactivo'}}
+      </span>
+      </td>
+      <td>
+        <button class="btn btn-outline-secondary btn-sm" (click)="openModal(template, order)">
+          <fa-icon [icon]="['far', 'edit']"></fa-icon>
+        </button>&nbsp;
+        <button class="btn btn-outline-danger btn-sm" (click)="delete(order)" *ngIf="order.status">
+          <fa-icon [icon]="['far', 'trash-alt']"></fa-icon>
+        </button>
+        <button class="btn btn-outline-success btn-sm" (click)="delete(order)" *ngIf="!order.status">
+          <fa-icon [icon]="['far', 'check-circle']"></fa-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">
+      {{!this.editingId ? 'Nueva' : 'Editar'}} Orden
+    </h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modalRef.hide()"></button>
+  </div>
+  <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="mb-1 col-md-6">
+          <label for="user" class="col-form-label">Usuario</label>
+          <select class="form-select" id="user" formControlName="id_user">
+            <option value="null" selected>** Seleccione **</option>
+            <option *ngFor="let user of users" value="{{user.id}}">{{user.name}}</option>
+          </select>
+        </div>
+        <div class="mb-1 col-md-6">
+          <label for="order_number" class="col-form-label">Número de Orden</label>
+          <input type="text" class="form-control" id="order_number" formControlName="order_number">
+        </div>
+      </div>
+      <div class="mb-1">
+        <label for="provider_name" class="col-form-label">Nombre de proveedor</label>
+        <input type="text" class="form-control" id="provider_name" formControlName="provider_name">
+      </div>
+      <div class="mb-1">
+        <label for="observation" class="col-form-label">Observación:</label>
+        <textarea class="form-control" id="observation" formControlName="observation"></textarea>
+      </div>
+      <div class="row">
+        <div class="mb-1 col-md-6">
+          <label for="total_value" class="col-form-label">Valor total</label>
+          <input type="text" class="form-control" id="total_value" formControlName="total_value">
+        </div>
+        <div class="mb-1 col-md-6">
+          <label for="date_time" class="col-form-label">Fecha</label>
+          <input type="date" class="form-control" id="date_time" formControlName="date_time">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Cancelar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!formData.valid">Guardar</button>
+    </div>
+  </form>
+</ng-template>
+
