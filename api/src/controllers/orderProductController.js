@@ -58,7 +58,15 @@ exports.update = (req, res) => {
                         message: "Error updating OrderProduct with id " + req.params.id
                     });
                 }
-            } else res.send(data);
+            }
+            
+            OrderProduct.findById(data.id, (err, data) => {
+                if (err)
+                    res.status(500).send({
+                        message: "Some error occurred while updating the Order Product."
+                    });
+                res.send(data);
+            })
         }
     );
 };

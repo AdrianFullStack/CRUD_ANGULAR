@@ -51,8 +51,8 @@ OrderProduct.update = (id, orderProduct, result) => {
     sql.query(
         `UPDATE ordersProducts SET value_unit = ?, unit = ?, description = ?, quantity = ?,
              qty_box = ?, weight = ?, volumen = ?, mark = ? WHERE id = ?`,
-        [orderProduct.valueUnit, orderProduct.unit, orderProduct.description,
-            orderProduct.quantity, orderProduct.quantity, orderProduct.qtyBox, orderProduct.weight,
+        [orderProduct.value_unit, orderProduct.unit, orderProduct.description,
+            orderProduct.quantity, orderProduct.qty_box, orderProduct.weight,
             orderProduct.volumen, orderProduct.mark, id],
         (err, res) => {
             if (err) {
@@ -66,7 +66,7 @@ OrderProduct.update = (id, orderProduct, result) => {
                 return;
             }
 
-            console.log("updated: ", { id: id, ...orderProduct });
+            orderProduct.id = Number(id)
             result(null, { id: id, ...orderProduct });
         }
     );
