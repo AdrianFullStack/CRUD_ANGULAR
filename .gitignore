@@ -13,6 +13,7 @@
 /crud-angular/yarn-error.log
 
 # IDEs and editors
+/api/.idea/
 /crud-angular/.idea/
 /crud-angular/.project
 /crud-angular/.classpath

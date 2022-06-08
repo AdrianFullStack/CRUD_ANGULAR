@@ -58,3 +58,16 @@ create table ordersproducts
 alter table ordersproducts
     add primary key (id);
 
+#SE AGREGA LA FUNCIÓN PARA ESTRAER EL PROMEDIO DE VALOR UNITARIO DE LOS PRODUCTOS DE UNA ORDEN
+DELIMITER //
+DROP FUNCTION IF EXISTS promedioValorUnitarioProductoPorOrden;
+CREATE FUNCTION promedioValorUnitarioProductoPorOrden(idorder INT) RETURNS DECIMAL(12,2) NOT DETERMINISTIC
+BEGIN
+    DECLARE number DECIMAL(12,2) UNSIGNED;
+    SELECT (SUM(value_unit)/COUNT(id)) INTO number FROM ordersproducts WHERE id_order = idorder;
+    IF ISNULL(number) THEN
+        SET number = 0;
+    END IF;
+    RETURN number;
+END //
+DELIMITER;

@@ -1,51 +1,16 @@
 <h1 class="mt-5">
   Lista de Ordenes
-
   <button class="btn btn-outline-primary btn-sm" (click)="openModal(template, null)">
     <fa-icon [icon]="['fas', 'plus']"></fa-icon> Nuevo
   </button>
 </h1>
 
-<table class="table table-bordered table-sm">
-  <thead class="table-secondary">
-    <tr>
-      <td>Usuario</td>
-      <td>N° Orden</td>
-      <td>Fecha Orden</td>
-      <td>Proveedor</td>
-      <td>Nota</td>
-      <td>Total</td>
-      <td>Estado</td>
-      <td>Ops</td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let order of orders; let i = index">
-      <td>{{order.name}}</td>
-      <td>{{order.order_number}}</td>
-      <td>{{order.date_time}}</td>
-      <td>{{order.provider_name}}</td>
-      <td>{{order.observation}}</td>
-      <td>{{order.total_value}}</td>
-      <td>
-        <span class="badge" [ngClass]="{'bg-success': order.status, 'bg-danger': !order.status}">
-        {{order.status ? 'Activo' : 'Inactivo'}}
-      </span>
-      </td>
-      <td>
-        <button class="btn btn-outline-secondary btn-sm" (click)="openModal(template, order)">
-          <fa-icon [icon]="['far', 'edit']"></fa-icon>
-        </button>&nbsp;
-        <button class="btn btn-outline-danger btn-sm" (click)="delete(order)" *ngIf="order.status">
-          <fa-icon [icon]="['far', 'trash-alt']"></fa-icon>
-        </button>
-        <button class="btn btn-outline-success btn-sm" (click)="delete(order)" *ngIf="!order.status">
-          <fa-icon [icon]="['far', 'check-circle']"></fa-icon>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<app-table
+  [headers]="headers"
+  [rows]="rows"
+  [options]="[]"
+  (eventEdit)="openModal(template, $event)"
+  (eventDelete)="delete($event)"></app-table>
 
 <ng-template #template>
   <div class="modal-header">

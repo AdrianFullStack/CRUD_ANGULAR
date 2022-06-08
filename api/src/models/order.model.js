@@ -12,10 +12,11 @@ const Order = function (order) {
 }
 
 Order.all = (result) => {
-    const query = `select *, o.id as id, u.id as idUser, date_format(date_time, '%Y-%m-%d') as date_time, o.status as status
+    const query = `select *, o.id as id, u.id as idUser, date_format(date_time, '%Y-%m-%d') as date_time, o.status as status,
+                    promedioValorUnitarioProductoPorOrden(o.id) AS total
                     from orders as o
                     inner join users u
-                        on o.id_user = u.id`;
+                        on o.id_user = u.id;`;
     sql.query(query, (err, res) => {
         if (err) result(null, err)
         result(null, res)
@@ -23,7 +24,8 @@ Order.all = (result) => {
 }
 
 Order.findById = (id, result) => {
-    const query = `select *, o.id as id, u.id as idUser, date_format(date_time, '%Y-%m-%d') as date_time, o.status as status
+    const query = `select *, o.id as id, u.id as idUser, date_format(date_time, '%Y-%m-%d') as date_time, o.status as status,
+                    promedioValorUnitarioProductoPorOrden(o.id) AS total
                     from orders as o
                     inner join users u
                         on o.id_user = u.id

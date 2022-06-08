@@ -1,0 +1,54 @@
+<table class="table table-bordered table-sm">
+  <thead class="table-secondary">
+  <tr>
+    <td *ngFor="let header of headers">{{header.title}}</td>
+    <td *ngIf="options && options.length > 0">Opciones</td>
+  </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of rows; let index">
+      <td *ngFor="let header of headers">
+        <span *ngIf="header.key === 'status'" class="badge" [ngClass]="{'bg-success': row[header.key], 'bg-danger': !row[header.key]}">
+          {{row[header.key] ? 'Activo' : 'Inactivo'}}
+        </span>
+        <span *ngIf="header.key !== 'status'">{{ row[header.key] }}</span>
+      </td>
+      <td *ngIf="options && options.length > 0">
+        <!--<ng-container *ngFor="let option of options; let index">
+          <ng-container *ngFor="let button of option.buttons">
+            <button class="btn btn-sm me-1"
+                    *ngIf="option.event !== 'delete'"
+                    [ngClass]="button.class"
+                    (click)="callbackEvent(option.event, row)">
+              <fa-icon [icon]="button.icon"></fa-icon>
+            </button>
+            <ng-container *ngIf="option.event === 'delete'">
+              <button class="btn btn-sm me-1"
+                      *ngIf="button.status === !!row.status"
+                      [ngClass]="button.class"
+                      (click)="callbackEvent(option.event, row)">
+                <fa-icon [icon]="button.icon"></fa-icon>
+              </button>
+            </ng-container>
+          </ng-container>
+        </ng-container>-->
+        <ng-container *ngFor="let option of options; let index">
+          <button class="btn btn-sm me-1"
+                  *ngIf="option.event !== 'delete'"
+                  [ngClass]="option.class"
+                  (click)="callbackEvent(option.event, row)">
+            <fa-icon [icon]="option.icon"></fa-icon>
+          </button>
+          <ng-container *ngIf="option.event === 'delete'">
+            <button class="btn btn-sm me-1"
+                    *ngIf="row.status == option.status"
+                    [ngClass]="option.class"
+                    (click)="callbackEvent(option.event, row)">
+              <fa-icon [icon]="option.icon"></fa-icon>
+            </button>
+          </ng-container>
+        </ng-container>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -29,7 +29,9 @@ const productReducer = createReducer(
 
   // GetProducts
   on(allActions.getProducts, (state) => ({...state, isLoading: true})),
-  on(allActions.getProductsSuccess, (state, result) => ({products: result.response, isLoading: false, isLoadingSuccess: true})),
+  on(allActions.getProductsSuccess, (state, result) => ({
+    products: result.response, isLoading: false, isLoadingSuccess: true
+  })),
 
   // Create Product Reducers
   on(allActions.createProduct, (state, {product}) => ({...state, isLoading: true, currentProduct: product})),

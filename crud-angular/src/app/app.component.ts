@@ -16,7 +16,5 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.store.dispatch(getUsers())
-    this.store.dispatch(getOrders())
-    this.store.dispatch(getProducts())
   }
 }

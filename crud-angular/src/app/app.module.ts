@@ -13,6 +13,7 @@ import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {faEdit, faTrashAlt, faCheckCircle} from "@fortawesome/free-regular-svg-icons";
 import {ModalModule} from "ngx-bootstrap/modal";
 import {UserEffects} from "./store/effects/user.effect";
+import { TableComponent } from './shared/table/table.component';
 
 @NgModule({
   declarations: [

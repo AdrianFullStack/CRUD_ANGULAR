@@ -5,7 +5,7 @@ import {Subject, takeUntil} from "rxjs";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
 import {selectOrders} from "../../store/selectors/order.selector";
-import {createProduct, deleteProduct, updateProduct} from "../../store/actions";
+import {createProduct, deleteProduct, getOrders, getProducts, updateProduct} from "../../store/actions";
 import {SwalAlert} from "../../utils/SwalAlert";
 import {selectProducts} from "../../store/selectors/product.selector";
 
@@ -18,15 +18,32 @@ export class ProductComponent implements OnInit {
 
   formData: FormGroup | any;
   modalRef: BsModalRef;
-  products: any;
   orders: any;
+  headers: any;
+  rows: any = [];
   editingId: any = null;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private readonly store: Store<AppState>,
               private fb: FormBuilder,
               private modalService: BsModalService) {
+    this.headers = [
+      { title: 'N° Orden', key: 'order_number' },
+      { title: 'Valor Unitario', key: 'value_unit' },
+      { title: 'Unidad', key: 'unit' },
+      { title: 'Descripción', key: 'description' },
+      { title: 'Cod Reg', key: 'sku' },
+      { title: 'Cant', key: 'quantity' },
+      { title: 'Cant Caja', key: 'qty_box' },
+      { title: 'Peso', key: 'weight' },
+      { title: 'Volumen', key: 'volumen' },
+      { title: 'Marca', key: 'mark' },
+      { title: 'NRO LOTE', key: 'nro_lote' },
+      { title: 'Estado', key: 'status' },
+    ]
 
+    this.store.dispatch(getProducts())
+    this.store.dispatch(getOrders())
     this.formData = this.fb.group({
       id_order: this.fb.control('', [Validators.nullValidator,  Validators.required]),
       value_unit: this.fb.control('', [Validators.nullValidator, Validators.required]),
@@ -38,7 +55,7 @@ export class ProductComponent implements OnInit {
       weight: this.fb.control('', [Validators.nullValidator, Validators.required]),
       volumen: this.fb.control('', [Validators.nullValidator, Validators.required]),
       mark: this.fb.control('', [Validators.nullValidator, Validators.required]),
-      //status: this.fb.control('', [Validators.nullValidator, Validators.required])
+      nro_lote: this.fb.control('', [Validators.nullValidator, Validators.required]),
     });
   }
 
@@ -47,9 +64,7 @@ export class ProductComponent implements OnInit {
       takeUntil(this.destroy$)
     ).subscribe(data => this.orders = data.orders)
 
-    this.store.select(selectProducts).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(data => this.products = data.products)
+    this.store.select(selectProducts).subscribe(data => this.rows = data.products)
   }
 
   onSubmit() {
@@ -72,10 +87,8 @@ export class ProductComponent implements OnInit {
         return Object.keys(this.formData.value).includes(key)
       })))
     } else {
-      console.log('FORM DATA', this.formData.value)
       this.formData.reset()
     }
-    console.log('FORM DATA', this.formData.value)
     this.modalRef = this.modalService.show(template);
   }
 

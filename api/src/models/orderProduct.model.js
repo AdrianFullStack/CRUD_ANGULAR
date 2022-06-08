@@ -12,6 +12,7 @@ const OrderProduct = function (orderProduct) {
     this.weight = orderProduct.weight
     this.volumen = orderProduct.volumen
     this.mark = orderProduct.mark
+    this.nro_lote = orderProduct.nro_lote
     this.status = orderProduct.status || true
 }
 
@@ -50,10 +51,10 @@ OrderProduct.create = (orderProduct, result) => {
 OrderProduct.update = (id, orderProduct, result) => {
     sql.query(
         `UPDATE ordersProducts SET value_unit = ?, unit = ?, description = ?, quantity = ?,
-             qty_box = ?, weight = ?, volumen = ?, mark = ? WHERE id = ?`,
+             qty_box = ?, weight = ?, volumen = ?, mark = ?, nro_lote = ? WHERE id = ?`,
         [orderProduct.value_unit, orderProduct.unit, orderProduct.description,
             orderProduct.quantity, orderProduct.qty_box, orderProduct.weight,
-            orderProduct.volumen, orderProduct.mark, id],
+            orderProduct.volumen, orderProduct.mark, orderProduct.nro_lote, id],
         (err, res) => {
             if (err) {
                 console.log("error: ", err);
